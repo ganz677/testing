@@ -13,5 +13,5 @@ __all__ = [
     'DataBaseHelper',
     'User',
     'Post',
-
+    'Profile'
 ]
