@@ -4,7 +4,8 @@ from core.models.db_helper import db_helper, DataBaseHelper
 from core.models.user import User
 from core.models.post import Post
 from core.models.profile import Profile
-
+from core.models.order import Order
+from core.models.order_product_association import order_product_association_table
 
 __all__ = [
     'Base',
@@ -13,5 +14,7 @@ __all__ = [
     'DataBaseHelper',
     'User',
     'Post',
-    'Profile'
+    'Profile',
+    'Order',
+    'order_product_association_table'
 ]
