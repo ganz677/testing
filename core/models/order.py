@@ -6,11 +6,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.models import Base
 
-from core.models.order_product_association import order_product_association_table
-
 
 if TYPE_CHECKING:
     from core.models.product import Product
+    from core.models.order_product_association import OrderProductAssociation
 
 class Order(Base):
     promocode: Mapped[str | None]
@@ -18,8 +17,11 @@ class Order(Base):
         server_default=func.now(),
         default=datetime.now,
     )
-    products: Mapped[list['Product']] = relationship(
-        secondary=order_product_association_table,
-        back_populates="orders",
-        # lazy='noload'
+    # products: Mapped[list['Product']] = relationship(
+    #     secondary='order_product_association',
+    #     back_populates="orders",
+    # )
+
+    products_details: Mapped[list['OrderProductAssociation']] = relationship(
+        back_populates="order",
     )
