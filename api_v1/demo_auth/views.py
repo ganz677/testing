@@ -11,7 +11,6 @@ router = APIRouter(prefix="/demo_auth", tags=["Demo Authentication"])
 security = HTTPBasic()
 
 
-
 @router.get('/basic-auth/')
 def demo_basic_credentials(
         credentials: Annotated[HTTPBasicCredentials, Depends(security)]
