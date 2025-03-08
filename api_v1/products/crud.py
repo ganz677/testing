@@ -5,7 +5,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.models import Product
 
-from .schemas import ProductCreate, ProductUpdate, ProductUpdatePartial
+from .schemas import (
+    ProductCreate,
+    ProductUpdate,
+    ProductUpdatePartial
+)
 
 
 async def get_products(

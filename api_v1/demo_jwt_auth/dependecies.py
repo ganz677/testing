@@ -1,7 +1,17 @@
 from jwt.exceptions import InvalidTokenError
 
-from fastapi import Form, HTTPException, status, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import (
+    Form,
+    HTTPException,
+    status,
+    Depends
+)
+from fastapi.security import (
+    OAuth2PasswordBearer,
+    # HTTPBearer,
+    # HTTPAuthorizationCredentials
+
+)
 
 from auth import utils as auth_utils
 from users.schemas import UserSchema
@@ -46,14 +56,21 @@ def validate_auth_user(
 
     if not user.is_active:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User is not active")
+
     return user
 
-http_bearer = HTTPBearer()
+
+# http_bearer = HTTPBearer()
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="/api/v1/jwt/login/",
+)
+
 
 def get_current_token_payload(
-        credentials: HTTPAuthorizationCredentials = Depends(http_bearer)
+        # credentials: HTTPAuthorizationCredentials = Depends(http_bearer)
+        token: str = Depends(oauth2_scheme)
 ) -> UserSchema:
-    token = credentials.credentials
+    # token = credentials.credentials
     try:
         payload = auth_utils.decode_jwt(
             token=token,
@@ -61,9 +78,10 @@ def get_current_token_payload(
     except InvalidTokenError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f'invalid token error{e}'
+            detail=f'invalid token error: {e}'
         )
     return payload
+
 
 def get_current_auth_user(
         payload: dict = Depends(get_current_token_payload)
@@ -85,5 +103,6 @@ def get_current_active_auth_user(
         return user
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
-        detail="user inactive"
+        detail="user inactive",
     )
+

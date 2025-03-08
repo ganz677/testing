@@ -1,4 +1,9 @@
-from fastapi import Path, Depends, HTTPException, status
+from fastapi import (
+    Path,
+    Depends,
+    HTTPException,
+    status
+)
 from typing import Annotated
 
 from sqlalchemy.ext.asyncio import AsyncSession

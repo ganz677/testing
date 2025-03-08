@@ -3,7 +3,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from . import crud
-from .schemas import ProductCreate, Product, ProductUpdate, ProductUpdatePartial
+from .schemas import (
+    ProductCreate,
+    Product,
+    ProductUpdate,
+    ProductUpdatePartial
+)
 
 from .dependencies import product_by_id
 
