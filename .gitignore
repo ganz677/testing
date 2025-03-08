@@ -3,3 +3,4 @@ certs/
 .idea
 __pycache__/
 *.local*
+/auth/readme.md
