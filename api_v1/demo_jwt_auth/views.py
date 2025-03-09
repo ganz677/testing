@@ -7,15 +7,20 @@ from fastapi.security import HTTPBearer
 from users.schemas import UserSchema
 from api_v1.demo_jwt_auth.helpers import (
     create_access_token,
-    create_refresh_token
+    create_refresh_token,
+    REFRESH_TOKEN_TYPE
 )
 
 from api_v1.demo_jwt_auth.dependecies import (
     validate_auth_user,
     get_current_active_auth_user,
-    get_current_token_payload
+    get_current_token_payload,
+    get_current_auth_user,
+    get_current_auth_user_for_refresh
+
 )
 from api_v1.demo_jwt_auth.schemas import TokenInfo
+
 
 http_bearer = HTTPBearer(auto_error=False)
 router = APIRouter(prefix="/jwt", tags=["JWT"], dependencies=[Depends(http_bearer)])
@@ -35,6 +40,20 @@ def auth_user_issue_jwt(
     return TokenInfo(
         access_token=access_token,
         refresh_token=refresh_token
+    )
+
+
+@router.post(
+    '/refresh/',
+    response_model=TokenInfo,
+    response_model_exclude_none=True, # если в нем есть нон, то мы его исключаем
+)
+def auth_refresh_jwt(
+        user: UserSchema = Depends(get_current_auth_user_for_refresh),
+) -> TokenInfo:
+    access_token = create_access_token(user)
+    return TokenInfo(
+        access_token=access_token
     )
 
 
